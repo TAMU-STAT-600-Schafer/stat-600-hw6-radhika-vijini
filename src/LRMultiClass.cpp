@@ -34,6 +34,11 @@ Rcpp::List LRMultiClass_c(const arma::mat& X, const arma::uvec& y, const arma::m
     ind_train(i, y(i)) = 1.0;
   }
   
+  // Compute initial pk
+  arma::mat X_beta = X * beta;
+  arma::mat exp_Xb = arma::exp(X_beta);
+  arma::vec row_sums = arma::sum(exp_Xb, 1);
+  arma::mat pk = exp_Xb.each_col() / row_sums;
   
   // Create named list with betas and objective values
   return Rcpp::List::create(Rcpp::Named("beta") = beta,

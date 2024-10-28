@@ -4,7 +4,7 @@
 # M - (optional) K by p matrix of cluster centers
 # Y - returns the vector Y of length n of cluster assignments (numbers from 1 to K)
 # numIter - number of maximal iterations for the algorithm, the default value is 100
-MyKmeans <- function(X, K, M = NULL, numIter = 100) {
+MyKmeans_R <- function(X, K, M = NULL, numIter = 100) {
   X <- as.matrix(X) #initialize X as a matrix and not a data frame or other type
   colnames(X) <- NULL
   
@@ -131,12 +131,76 @@ MyKmeans <- function(X, K, M = NULL, numIter = 100) {
 }
 
 
-# testing different values of M
+## TEST R CODE IMPLEMENTATION- no C++
 #random data with random init (i.e. M = NULL)
 set.seed(123)
 X <- matrix(rnorm(100), nrow = 20)  # 20 points, 5 dimensions
 
 # K-means with K = 3 clusters and random initialization
-result <- MyKmeans(X, K = 3)
+result <- MyKmeans_R(X, K = 3)
 print(result)
 
+##TEST C++ IMPLEMENTATION
+Rcpp::sourceCpp("src/kmeans.cpp")
+source("~/stat-600-hw6-radhika-vijini/R/Kmeans_wrapper.R", echo=TRUE)
+set.seed(123)
+X2 <- matrix(rnorm(100), nrow = 20)  # 20 points, 5 dimensions
+
+# K-means with K = 3 clusters and random initialization
+result2 <- MyKmeans(X2, K = 3)
+print(result2)
+
+library(microbenchmark)
+require(fossil)
+
+#microbenchmark::microbenchmark(MyKmeans(X, K = 3), MyKmeans(X2, K = 3), times = 10)
+# Check R Algorithm
+
+# #another with M specified this time
+# set.seed(123)
+# X <- matrix(rnorm(100), nrow = 20)  # 20 points, 5 dimensions
+# 
+# # set M as the first 3 points in X
+# M_specific <- X[1:3, ]
+# 
+# # K-means with K = 3 clusters, starting with specific M
+# result <- MyKmeans(X, K = 3, M = M_specific)
+# print(result)
+
+
+## TEST TIME for C++ vs R IMPLEMENTATIONS
+nRep <- 50
+#source("FunctionsKmeans.R")
+set.seed(123)
+X <- matrix(rnorm(100), nrow = 20)  # 20 points, 5 dimensions
+
+#initialize a start time for R time
+start <- Sys.time()
+for (i in 1:nRep) {
+  #loop through 50 replications
+  #get the clusters and store them in rand_idx matrix
+  Rcode = MyKmeans(X, K = 3) 
+}
+end <- Sys.time() #record finish time
+time_elapsed <- round(end - start, 2)
+time_elapsed #Time difference of 2.72 mins
+
+
+# Report mean run time for one replication on your machine
+time_elapsed / 50 #Time difference of  mins
+
+
+
+set.seed(123)
+X <- matrix(rnorm(1000), nrow = 100)  # 100 points with 10 dimensions
+K <- 3  
+
+# Run benchmark for C++ implementation vs. R implementation
+benchmark_results <- microbenchmark(
+  Rcpp_implementation = MyKmeans(X, K),       
+  R_implementation = MyKmeans_R(X, K),
+  times = 10  
+)
+
+print(benchmark_results)
+summary(benchmark_results)

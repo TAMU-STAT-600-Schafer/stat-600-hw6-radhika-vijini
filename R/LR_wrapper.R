@@ -1,6 +1,6 @@
 
 
-#' Title
+#' Multi-Class Logistic Regression
 #'
 #' @param X
 #' @param y

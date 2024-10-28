@@ -169,27 +169,6 @@ require(fossil)
 
 
 ## TEST TIME for C++ vs R IMPLEMENTATIONS
-nRep <- 50
-#source("FunctionsKmeans.R")
-set.seed(123)
-X <- matrix(rnorm(100), nrow = 20)  # 20 points, 5 dimensions
-
-#initialize a start time for R time
-start <- Sys.time()
-for (i in 1:nRep) {
-  #loop through 50 replications
-  #get the clusters and store them in rand_idx matrix
-  Rcode = MyKmeans(X, K = 3) 
-}
-end <- Sys.time() #record finish time
-time_elapsed <- round(end - start, 2)
-time_elapsed #Time difference of 2.72 mins
-
-
-# Report mean run time for one replication on your machine
-time_elapsed / 50 #Time difference of  mins
-
-
 
 set.seed(123)
 X <- matrix(rnorm(1000), nrow = 100)  # 100 points with 10 dimensions

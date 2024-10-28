@@ -45,6 +45,34 @@ Rcpp::List LRMultiClass_c(const arma::mat& X, const arma::uvec& y, const arma::m
   double obj = -arma::accu(ind_train % log_pk) + (lambda / 2.0) * arma::accu(arma::square(beta));
   objective(0) = obj;
   
+  // Newton's method cycle - implement the update EXACTLY numIter iterations
+  
+  for (int iter = 0; iter < numIter; ++iter) {
+    // Compute W
+    arma::mat W = pk % (1.0 - pk);
+    
+    // Update beta for each class
+    for (int j = 0; j < K; ++j) {
+      arma::vec Wj = W.col(j);
+      arma::mat XWj = X.each_col() % Wj;
+      arma::mat Hkk = X.t() * XWj + lambda * arma::eye(p, p);
+      arma::vec grad = X.t() * (pk.col(j) - ind_train.col(j)) + lambda * beta.col(j);
+      arma::mat Hkk_inv = arma::inv_sympd(Hkk); // Use inv_sympd for symmetric positive-definite matrices
+      beta.col(j) = beta.col(j) - eta * Hkk_inv * grad;
+    }
+    
+    // Update pk
+    X_beta = X * beta;
+    exp_Xb = arma::exp(X_beta);
+    row_sums = arma::sum(exp_Xb, 1);
+    pk = exp_Xb.each_col() / row_sums;
+    
+    // Update objective value
+    log_pk = arma::log(pk);
+    obj = -arma::accu(ind_train % log_pk) + (lambda / 2.0) * arma::accu(arma::square(beta));
+    objective(iter + 1) = obj;
+  }
+  
   // Create named list with betas and objective values
   return Rcpp::List::create(Rcpp::Named("beta") = beta,
                             Rcpp::Named("objective") = objective);

@@ -18,7 +18,9 @@ arma::uvec MyKmeans_c(const arma::mat& X, int K,
     // Initialize some parameters
     int n = X.n_rows;
     //int p = X.n_cols;
-    arma::uvec Y(n); // to store cluster assignments
+    arma::uvec Y(n, arma::fill::zeros); // to store cluster assignments
+    arma::mat M1;
+    M1 = M;
     
     // Initialize any additional parameters if needed
     arma::uvec oldY(n);
@@ -29,7 +31,7 @@ arma::uvec MyKmeans_c(const arma::mat& X, int K,
       // Compute distances from each point to each centroid
       arma::mat distances(n, K, arma::fill::zeros);
       for (int k = 0; k < K; ++k) {
-        distances.col(k) = arma::sum(arma::square(X.each_row() - M.row(k)), 1);
+        distances.col(k) = arma::sum(arma::square(X.each_row() - M1.row(k)), 1);
       }
       
       // Assign each point to the nearest cluster
@@ -44,8 +46,13 @@ arma::uvec MyKmeans_c(const arma::mat& X, int K,
         if (idx.is_empty()) {
           Rcpp::stop("Error: Change your value of M, at least one of the clusters have disappeared.");
         }
-        arma::rowvec(arma::mean(X.rows(idx), 0));
+        //M.row(k) = arma::rowvec(arma::mean(X.rows(idx), 0));
+        //arma::rowvec mean_row = arma::mean(X.rows(idx), 0);
+        M1.row(k) = arma::rowvec(arma::mean(X.rows(idx), 0));
+        
+        //M.row(k) = mean_row;
       }
+      
     }
     
     // Returns the vector of cluster assignments

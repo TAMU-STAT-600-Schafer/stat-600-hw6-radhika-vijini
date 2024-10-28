@@ -35,7 +35,18 @@ arma::uvec MyKmeans_c(const arma::mat& X, int K,
       // Assign each point to the nearest cluster
       Y = arma::index_min(distances, 1);  // Get index of minimum distance
       
+      // convergence check
+      if (arma::all(Y == oldY)) break;
       
+      // perform updating of the centroids
+      for (int k = 0; k < K; ++k) {
+        arma::uvec idx = arma::find(Y == k);
+        if (idx.is_empty()) {
+          Rcpp::stop("Error: Change your value of M, at least one of the clusters have disappeared.");
+        }
+        arma::rowvec(arma::mean(X.rows(idx), 0));
+      }
+    }
     
     // Returns the vector of cluster assignments
     return(Y+1); //add 1 so we can back to r indexing

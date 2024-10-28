@@ -28,16 +28,18 @@ arma::uvec MyKmeans_c(const arma::mat& X, int K,
     for (int iter = 0; iter < numIter; ++iter) {
       oldY = Y;  // Store previous assignments
       
-      // Compute distances from each point to each centroid
+      // get distances from each point to each centroid
       arma::mat distances(n, K, arma::fill::zeros);
       for (int k = 0; k < K; ++k) {
         distances.col(k) = arma::sum(arma::square(X.each_row() - M1.row(k)), 1);
       }
       
-      // Assign each point to the nearest cluster
-      Y = arma::index_min(distances, 1);  // Get index of minimum distance
+      // assign each data point to the cluster which is the smallest distance away from the point
+      Y = arma::index_min(distances, 1);  
       
-      // convergence check
+      // convergence check: 
+      //convergence criterion: check if the cluster centroids are not changing anymore
+      //if they are not changing we need to break out of the iteration
       if (arma::all(Y == oldY)) break;
       
       // perform updating of the centroids
@@ -46,11 +48,9 @@ arma::uvec MyKmeans_c(const arma::mat& X, int K,
         if (idx.is_empty()) {
           Rcpp::stop("Error: Change your value of M, at least one of the clusters have disappeared.");
         }
-        //M.row(k) = arma::rowvec(arma::mean(X.rows(idx), 0));
-        //arma::rowvec mean_row = arma::mean(X.rows(idx), 0);
+        
         M1.row(k) = arma::rowvec(arma::mean(X.rows(idx), 0));
         
-        //M.row(k) = mean_row;
       }
       
     }

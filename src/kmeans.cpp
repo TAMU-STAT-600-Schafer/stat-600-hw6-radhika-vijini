@@ -22,13 +22,21 @@ arma::uvec MyKmeans_c(const arma::mat& X, int K,
     
     // Initialize any additional parameters if needed
     arma::uvec oldY(n);
-    // For loop with kmeans algorithm
+    // start for loop
     for (int iter = 0; iter < numIter; ++iter) {
       oldY = Y;  // Store previous assignments
       
       // Compute distances from each point to each centroid
       arma::mat distances(n, K, arma::fill::zeros);
+      for (int k = 0; k < K; ++k) {
+        distances.col(k) = arma::sum(arma::square(X.each_row() - M.row(k)), 1);
+      }
       
+      // Assign each point to the nearest cluster
+      Y = arma::index_min(distances, 1);  // Get index of minimum distance
+      
+      
+    
     // Returns the vector of cluster assignments
     return(Y+1); //add 1 so we can back to r indexing
 }

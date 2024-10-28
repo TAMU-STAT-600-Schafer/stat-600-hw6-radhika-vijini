@@ -16,10 +16,10 @@
 #' # Give example
 LRMultiClass <- function(X,
                          y,
+                         beta_init = NULL,
                          numIter = 50,
                          eta = 0.1,
-                         lambda = 1,
-                         beta_init = NULL) {
+                         lambda = 1) {
   n <- nrow(X) # save variable of nrows as n, number of observations
   p <- ncol(X) # save variable of ncols as p, number of predictors
   K <- length(unique(y)) #number of class labels

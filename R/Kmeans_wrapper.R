@@ -14,7 +14,7 @@
 #' set.seed(123)
 #' X <- matrix(rnorm(100), nrow = 20)  # 20 points, 5 dimensions
 #' # K-means with K = 3 clusters and random initialization
-#' result <- MyKMeans(X, K = 3)
+#' result <- MyKmeans(X, K = 3)
 #' print(result)
 #'  [,1]
 #'  [1,]    1
@@ -38,7 +38,7 @@
 #' [19,]    3
 #' [20,]    1
 
-MyKMeans <- function(X, K, M = NULL, numIter = 100){
+MyKmeans <- function(X, K, M = NULL, numIter = 100){
   
   n = nrow(X) # number of rows in X
   

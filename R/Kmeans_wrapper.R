@@ -5,11 +5,39 @@
 #' @param M 
 #' @param numIter 
 #'
-#' @return Explain return
+#' @return Explain return- return all values of class assignments as a vector 
 #' @export
 #'
 #' @examples
 #' # Give example
+
+#' set.seed(123)
+#' X <- matrix(rnorm(100), nrow = 20)  # 20 points, 5 dimensions
+#' # K-means with K = 3 clusters and random initialization
+#' result <- MyKMeans(X, K = 3)
+#' print(result)
+#'  [,1]
+#'  [1,]    1
+#'  [2,]    1
+#'  [3,]    3
+#'  [4,]    1
+#'  [5,]    1
+#'  [6,]    3
+#'  [7,]    3
+#'  [8,]    1
+#'  [9,]    1
+#' [10,]    3
+#' [11,]    3
+#' [12,]    1
+#' [13,]    3
+#' [14,]    1
+#' [15,]    3
+#' [16,]    2
+#' [17,]    3
+#' [18,]    1
+#' [19,]    3
+#' [20,]    1
+
 MyKMeans <- function(X, K, M = NULL, numIter = 100){
   
   n = nrow(X) # number of rows in X
@@ -41,9 +69,3 @@ MyKMeans <- function(X, K, M = NULL, numIter = 100){
   return(Y)
 }
 
-set.seed(123)
-X <- matrix(rnorm(100), nrow = 20)  # 20 points, 5 dimensions
-
-# K-means with K = 3 clusters and random initialization
-result <- MyKMeans(X, K = 3)
-print(result)

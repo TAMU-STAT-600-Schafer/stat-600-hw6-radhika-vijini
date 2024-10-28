@@ -7,7 +7,7 @@
 // RcppArmadillo so that the build process will know what to do
 //
 // [[Rcpp::depends(RcppArmadillo)]]
-
+using namespace Rcpp;
 // For simplicity, no test data, only training data, and no error calculation.
 // X - n x p data matrix
 // y - n length vector of classes, from 0 to K-1
@@ -17,22 +17,25 @@
 // beta_init - p x K matrix of starting beta values (always supplied in right format)
 // [[Rcpp::export]]
 Rcpp::List LRMultiClass_c(const arma::mat& X, const arma::uvec& y, const arma::mat& beta_init,
-                               int numIter = 50, double eta = 0.1, double lambda = 1){
-    // All input is assumed to be correct
-    
-    // Initialize some parameters
-    int K = max(y) + 1; // number of classes
-    int p = X.n_cols;
-    int n = X.n_rows;
-    arma::mat beta = beta_init; // to store betas and be able to change them if needed
-    arma::vec objective(numIter + 1); // to store objective values
-    
-    // Initialize anything else that you may need
-    
-    // Newton's method cycle - implement the update EXACTLY numIter iterations
-    
-    
-    // Create named list with betas and objective values
-    return Rcpp::List::create(Rcpp::Named("beta") = beta,
-                              Rcpp::Named("objective") = objective);
+                          int numIter = 50, double eta = 0.1, double lambda = 1){
+  // All input is assumed to be correct
+  
+  // Initialize some parameters
+  int K = max(y) + 1; // number of classes
+  int p = X.n_cols;
+  int n = X.n_rows;
+  arma::mat beta = beta_init; // to store betas and be able to change them if needed
+  arma::vec objective(numIter + 1); // to store objective values
+  
+  // Initialize anything else that you may need
+  // Indicator matrix for y
+  arma::mat ind_train = arma::zeros(n, K);
+  for (int i = 0; i < n; ++i) {
+    ind_train(i, y(i)) = 1.0;
+  }
+  
+  
+  // Create named list with betas and objective values
+  return Rcpp::List::create(Rcpp::Named("beta") = beta,
+                            Rcpp::Named("objective") = objective);
 }

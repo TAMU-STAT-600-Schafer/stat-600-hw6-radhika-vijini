@@ -2,29 +2,47 @@
 % Please edit documentation in R/LR_wrapper.R
 \name{LRMultiClass}
 \alias{LRMultiClass}
-\title{Title}
+\title{Multi-Class Logistic Regression}
 \usage{
-LRMultiClass(X, y, numIter = 50, eta = 0.1, lambda = 1, beta_init = NULL)
+LRMultiClass(X, y, beta_init = NULL, numIter = 50, eta = 0.1, lambda = 1)
 }
 \arguments{
-\item{X}{}
+\item{X}{input matrix of covariates, n x p training data, 1st column should be 1s to account for intercept}
 
-\item{y}{}
+\item{y}{n length vector of classes, from 0 to K-1}
 
-\item{numIter}{}
+\item{beta_init}{p x K matrix, initial starting values of beta for the algorithm}
 
-\item{eta}{}
+\item{numIter}{number of FIXED iterations of the algorithm, default value is 50}
 
-\item{lambda}{}
+\item{eta}{learning rate, default value is 0.1}
 
-\item{beta_init}{}
+\item{lambda}{ridge parameter, default value is 1}
 }
 \value{
-
+returns a list of two matrices: beta matrix (p x K matrix of estimated beta values after numIter iterations) and objective values matrix ((numIter + 1) length vector of objective values of the function that we are minimizing at each iteration (+ starting value))
 }
 \description{
-Title
+Multi-Class Logistic Regression
 }
 \examples{
 # Give example
+
+set.seed(42)
+n <- 100  # Number of observations
+p <- 3    # Number of predictors (including intercept)
+K <- 2    # Number of classes
+X <- cbind(1, matrix(rnorm(n * (p - 1)), nrow = n))  # Generate predictors
+beta_true <- matrix(rnorm(p * K), nrow = p)   # True beta coefficients
+eta_mat <- X \%*\% beta_true    # Compute linear predictors
+exp_eta <- exp(eta_mat)
+probs <- exp_eta / rowSums(exp_eta)   # Compute probabilities using softmax
+y <- apply(probs, 1, function(prob) sample(0:(K - 1), 1, prob = prob))   # Generate response variable y
+y <- as.integer(y)   # Convert y to integer type
+beta_init <- matrix(0, nrow = p, ncol = K)   # Initialize beta_init with zeros
+LRMultiClass_R <- LRMultiClass(X, y, beta_init, numIter = 10, eta = 0.1, lambda = 1)  # Run the R implementation
+beta_R <- LRMultiClass_R$beta    #Output beta
+objective_R <- LRMultiClass_R$objective    #Output objectives
+print(beta_R)
+print(objective_R)
 }

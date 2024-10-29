@@ -21,7 +21,7 @@
 #' K <- 2    # Number of classes
 #' X <- cbind(1, matrix(rnorm(n * (p - 1)), nrow = n))  # Generate predictors
 #' Y <- sample(0:(K-1), size = n, replace = TRUE)
-#' LRMultiClass_R <- LRMultiClass(X, y, beta_init, numIter = 50, eta = 0.1, lambda = 1)  # Run the R implementation
+#' LRMultiClass(X, y, beta_init, numIter = 50, eta = 0.1, lambda = 1)  # Run the R implementation
 
 LRMultiClass <- function(X,
                          y,

@@ -2,24 +2,24 @@
 % Please edit documentation in R/Kmeans_wrapper.R
 \name{MyKmeans}
 \alias{MyKmeans}
-\title{Title}
+\title{K-Means Clustering Wrapper Function}
 \usage{
 MyKmeans(X, K, M = NULL, numIter = 100)
 }
 \arguments{
-\item{X}{}
+\item{X}{n by p matrix containing n data points to cluster.}
 
-\item{K}{}
+\item{K}{An integer specifying number of clusters.}
 
-\item{M}{}
+\item{M}{K by p matrix of cluster centers.}
 
-\item{numIter}{}
+\item{numIter}{number of maximal iterations for the algorithm, the default value is 100.}
 }
 \value{
 Explain return- return all values of class assignments as a vector
 }
 \description{
-Title
+K-Means Clustering Wrapper Function
 }
 \examples{
 # Give example

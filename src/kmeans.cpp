@@ -22,19 +22,24 @@ arma::uvec MyKmeans_c(const arma::mat& X, int K,
     // All input is assumed to be correct
     
     // Initialize some parameters
-    int n = X.n_rows;
+    int n = X.n_rows;   // Initialize n as number of rows in X
     //int p = X.n_cols;
     arma::uvec Y(n, arma::fill::zeros); // to store cluster assignments
     arma::mat M1;
     M1 = M;
     
     // Initialize any additional parameters if needed
-    arma::uvec oldY(n);
+    arma::uvec oldY(n); //initialize number of centroids
     // start for loop
     for (int iter = 0; iter < numIter; ++iter) {
       oldY = Y;  // Store previous assignments
       
-      // get distances from each point to each centroid
+// get distances from each point to each centroid
+//for each cluster, we need to calculate distances between points and centers of clusters and store in the distance matrix
+//euclidean distance formula is ((X-M)^2), we want to minimize this
+//open the square we get X^2 + M^2 + -2*XM'
+//when optimizing we don't need to minimize X^2 since it is the data points they don't change from column to column of distance matrix
+      
       arma::mat distances(n, K, arma::fill::zeros);
       for (int k = 0; k < K; ++k) {
         distances.col(k) = arma::sum(arma::square(X.each_row() - M1.row(k)), 1);
@@ -54,7 +59,7 @@ arma::uvec MyKmeans_c(const arma::mat& X, int K,
         if (idx.is_empty()) {
           Rcpp::stop("Error: Change your value of M, at least one of the clusters have disappeared.");
         }
-        
+//now assign the mean centroid (using colMeans) to the rows of M
         M1.row(k) = arma::rowvec(arma::mean(X.rows(idx), 0));
         
       }

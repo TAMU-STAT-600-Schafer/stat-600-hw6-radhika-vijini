@@ -1,9 +1,9 @@
-#' Title
+#' K-Means Clustering Wrapper Function
 #'
-#' @param X 
-#' @param K 
-#' @param M 
-#' @param numIter 
+#' @param X n by p matrix containing n data points to cluster.
+#' @param K An integer specifying number of clusters.
+#' @param M K by p matrix of cluster centers.
+#' @param numIter number of maximal iterations for the algorithm, the default value is 100.
 #'
 #' @return Explain return- return all values of class assignments as a vector 
 #' @export

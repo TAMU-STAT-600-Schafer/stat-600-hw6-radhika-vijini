@@ -2,14 +2,14 @@
 
 #' Multi-Class Logistic Regression
 #'
-#' @param X
-#' @param y
-#' @param numIter
-#' @param eta
-#' @param lambda
-#' @param beta_init
+#' @param X input matrix of covariates, n x p training data, 1st column should be 1s to account for intercept
+#' @param y n length vector of classes, from 0 to K-1
+#' @param numIter number of FIXED iterations of the algorithm, default value is 50
+#' @param eta learning rate, default value is 0.1
+#' @param lambda ridge parameter, default value is 1
+#' @param beta_init p x K matrix, initial starting values of beta for the algorithm
 #'
-#' @return
+#' @return returns a list of two matrices: beta matrix (p x K matrix of estimated beta values after numIter iterations) and objective values matrix ((numIter + 1) length vector of objective values of the function that we are minimizing at each iteration (+ starting value))
 #' @export
 #'
 #' @examples
@@ -30,6 +30,9 @@
 #' LRMultiClass_R <- LRMultiClass(X, y, beta_init, numIter = 10, eta = 0.1, lambda = 1)  # Run the R implementation
 #' beta_R <- LRMultiClass_R$beta    #Output beta
 #' objective_R <- LRMultiClass_R$objective    #Output objectives
+#' print(beta_R)
+#' print(objective_R)
+
 
 LRMultiClass <- function(X,
                          y,
@@ -78,3 +81,30 @@ LRMultiClass <- function(X,
   # Return the class assignments
   return(out)
 }
+
+set.seed(42)
+n <- 100  # Number of observations
+p <- 3    # Number of predictors (including intercept)
+K <- 2    # Number of classes
+X <- cbind(1, matrix(rnorm(n * (p - 1)), nrow = n))  # Generate predictors
+beta_true <- matrix(rnorm(p * K), nrow = p)   # True beta coefficients
+eta_mat <- X %*% beta_true    # Compute linear predictors
+exp_eta <- exp(eta_mat)
+probs <- exp_eta / rowSums(exp_eta)   # Compute probabilities using softmax
+y <- apply(probs, 1, function(prob) sample(0:(K - 1), 1, prob = prob))   # Generate response variable y
+y <- as.integer(y)   # Convert y to integer type
+beta_init <- matrix(0, nrow = p, ncol = K)   # Initialize beta_init with zeros
+LRMultiClass_R <- LRMultiClass(X, y, beta_init, numIter = 10, eta = 0.1, lambda = 1)  # Run the R implementation
+beta_R <- LRMultiClass_R$beta    #Output beta
+objective_R <- LRMultiClass_R$objective    #Output objectives
+
+#class(beta_R)
+#class(objective_R)
+
+
+print(beta_R)
+print(objective_R)
+
+
+
+

@@ -33,16 +33,6 @@ n <- 100  # Number of observations
 p <- 3    # Number of predictors (including intercept)
 K <- 2    # Number of classes
 X <- cbind(1, matrix(rnorm(n * (p - 1)), nrow = n))  # Generate predictors
-beta_true <- matrix(rnorm(p * K), nrow = p)   # True beta coefficients
-eta_mat <- X \%*\% beta_true    # Compute linear predictors
-exp_eta <- exp(eta_mat)
-probs <- exp_eta / rowSums(exp_eta)   # Compute probabilities using softmax
-y <- apply(probs, 1, function(prob) sample(0:(K - 1), 1, prob = prob))   # Generate response variable y
-y <- as.integer(y)   # Convert y to integer type
-beta_init <- matrix(0, nrow = p, ncol = K)   # Initialize beta_init with zeros
-LRMultiClass_R <- LRMultiClass(X, y, beta_init, numIter = 10, eta = 0.1, lambda = 1)  # Run the R implementation
-beta_R <- LRMultiClass_R$beta    #Output beta
-objective_R <- LRMultiClass_R$objective    #Output objectives
-print(beta_R)
-print(objective_R)
+Y <- sample(0:(K-1), size = n, replace = TRUE)
+LRMultiClass_R <- LRMultiClass(X, y, beta_init, numIter = 50, eta = 0.1, lambda = 1)  # Run the R implementation
 }

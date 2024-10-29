@@ -125,25 +125,8 @@ set.seed(42)
 n <- 100  # Number of observations
 p <- 3    # Number of predictors (including intercept)
 K <- 2    # Number of classes
-
-# Generate predictors
-X <- cbind(1, matrix(rnorm(n * (p - 1)), nrow = n))
-
-# True beta coefficients
-beta_true <- matrix(rnorm(p * K), nrow = p)
-
-# Compute linear predictors
-eta_mat <- X %*% beta_true
-
-# Compute probabilities using softmax
-exp_eta <- exp(eta_mat)
-probs <- exp_eta / rowSums(exp_eta)
-
-# Generate response variable y
-y <- apply(probs, 1, function(prob) sample(0:(K - 1), 1, prob = prob))
-
-# Convert y to integer type
-y <- as.integer(y)
+X <- cbind(1, matrix(rnorm(n * (p - 1)), nrow = n))  # Generate predictors
+Y <- sample(0:(K-1), size = n, replace = TRUE)
 
 # Run the R implementation
 #result_R <- LRMultiClass_R(X, y, beta_init, numIter = 10, eta = 0.1, lambda = 1)
@@ -160,24 +143,8 @@ n <- 100  # Number of observations
 p <- 3    # Number of predictors (including intercept)
 K <- 2    # Number of classes
 
-# Generate predictors
-X <- cbind(1, matrix(rnorm(n * (p - 1)), nrow = n))
-
-# True beta coefficients
-beta_true <- matrix(rnorm(p * K), nrow = p)
-
-# Compute linear predictors
-eta_mat <- X %*% beta_true
-
-# Compute probabilities using softmax
-exp_eta <- exp(eta_mat)
-probs <- exp_eta / rowSums(exp_eta)
-
-# Generate response variable y
-y <- apply(probs, 1, function(prob) sample(0:(K - 1), 1, prob = prob))
-
-# Convert y to integer type
-y <- as.integer(y)
+X <- cbind(1, matrix(rnorm(n * (p - 1)), nrow = n))  # Generate predictors
+Y <- sample(0:(K-1), size = n, replace = TRUE)
 
 # Initialize beta_init with zeros
 beta_init <- matrix(0, nrow = p, ncol = K)
@@ -189,11 +156,13 @@ result_Cpp <- LRMultiClass(X, y)
 # Extract results
 beta_Cpp <- result_Cpp$beta
 objective_Cpp <- result_Cpp$objective
-objective_Cpp<-as.vector(objective_Cpp)
 
+#Compare the equality of results
 all.equal(beta_R,beta_Cpp)
-all.equal(objective_R,objective_Cpp)
+all.equal(objective_R,as.vector(objective_Cpp))
+as.vector(objective_Cpp)
 
+#Compare the speed of C++ and R codes
 library(microbenchmark)
 require(fossil)
 

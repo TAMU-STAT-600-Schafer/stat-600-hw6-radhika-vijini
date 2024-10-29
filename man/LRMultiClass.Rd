@@ -29,10 +29,10 @@ Multi-Class Logistic Regression
 # Give example
 
 set.seed(42)
-n <- 100  # Number of observations
-p <- 3    # Number of predictors (including intercept)
-K <- 2    # Number of classes
-X <- cbind(1, matrix(rnorm(n * (p - 1)), nrow = n))  # Generate predictors
+n <- 100  
+p <- 3    
+K <- 2    
+X <- cbind(1, matrix(rnorm(n * (p - 1)), nrow = n))  
 Y <- sample(0:(K-1), size = n, replace = TRUE)
-LRMultiClass_R <- LRMultiClass(X, y, beta_init, numIter = 50, eta = 0.1, lambda = 1)  # Run the R implementation
+LRMultiClass(X, y, beta_init, numIter = 50, eta = 0.1, lambda = 1)  
 }

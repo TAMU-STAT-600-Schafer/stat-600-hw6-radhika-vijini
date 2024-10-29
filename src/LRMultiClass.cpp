@@ -35,42 +35,45 @@ Rcpp::List LRMultiClass_c(const arma::mat& X, const arma::uvec& y, const arma::m
   }
   
   // Compute initial pk
-  arma::mat X_beta = X * beta;
-  arma::mat exp_Xb = arma::exp(X_beta);
-  arma::vec row_sums = arma::sum(exp_Xb, 1);
-  arma::mat pk = exp_Xb.each_col() / row_sums;
+  arma::mat X_beta = X * beta;// store Xbeta matrix
+  arma::mat exp_Xb = arma::exp(X_beta);// intermediate storage of exp(Xb)
+  arma::vec row_sums = arma::sum(exp_Xb, 1); // perform row sums
+  arma::mat pk = exp_Xb.each_col() / row_sums; // calculate corresponding pk
   
   // Compute initial objective value
-  arma::mat log_pk = arma::log(pk);
-  double obj = -arma::accu(ind_train % log_pk) + (lambda / 2.0) * arma::accu(arma::square(beta));
-  objective(0) = obj;
+  arma::mat log_pk = arma::log(pk); // log objective value
+  double obj = -arma::accu(ind_train % log_pk) + (lambda / 2.0) * arma::accu(arma::square(beta)); // calculate current objective value
+  objective(0) = obj; //set first value of objective as this initial obj 
+  
   
   // Newton's method cycle - implement the update EXACTLY numIter iterations
   
   for (int iter = 0; iter < numIter; ++iter) {
-    // Compute W
+    // Compute W, as given formula in the pdf
     arma::mat W = pk % (1.0 - pk);
     
     // Update beta for each class
+    // Within one iteration: perform the update, calculate updated objective function 
+    // beta update
     for (int j = 0; j < K; ++j) {
       arma::vec Wj = W.col(j);
       arma::mat XWj = X.each_col() % Wj;
       arma::mat Hkk = X.t() * XWj + lambda * arma::eye(p, p);
       arma::vec grad = X.t() * (pk.col(j) - ind_train.col(j)) + lambda * beta.col(j);
       arma::mat Hkk_inv = arma::inv_sympd(Hkk); // Use inv_sympd for symmetric positive-definite matrices
-      beta.col(j) = beta.col(j) - eta * Hkk_inv * grad;
+      beta.col(j) = beta.col(j) - eta * Hkk_inv * grad; // damped newton's update
     }
     
     // Update pk
-    X_beta = X * beta;
-    exp_Xb = arma::exp(X_beta);
-    row_sums = arma::sum(exp_Xb, 1);
-    pk = exp_Xb.each_col() / row_sums;
+    X_beta = X * beta; // store Xbeta matrix
+    exp_Xb = arma::exp(X_beta); //intermediate storage of exp(Xb)
+    row_sums = arma::sum(exp_Xb, 1); // perform row sums
+    pk = exp_Xb.each_col() / row_sums;// calculate corresponding pk
     
     // Update objective value
-    log_pk = arma::log(pk);
-    obj = -arma::accu(ind_train % log_pk) + (lambda / 2.0) * arma::accu(arma::square(beta));
-    objective(iter + 1) = obj;
+    log_pk = arma::log(pk); // log objective values
+    obj = -arma::accu(ind_train % log_pk) + (lambda / 2.0) * arma::accu(arma::square(beta)); // calculate objective value
+    objective(iter + 1) = obj;// next iteration
   }
   
   // Create named list with betas and objective values

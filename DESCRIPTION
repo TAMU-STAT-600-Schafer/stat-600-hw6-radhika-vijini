@@ -6,12 +6,11 @@ Date: 2020-10-17
 Author: c(person("Radhika", "Kulkarni",
 email = "rrkulkarni@tamu.edu",
 role = c("aut", "cre")),
-person("Irina", "Gaynanova",
-email = "rrkulkarni@tamu.edu",
+person("Vijini Lakmini", "Rathnayake Mudiyanselage",
+email = "vijinil@tamu.edu",
 role = "aut"))
 Maintainer: <rrkulkarni@tamu.edu>
-Description: Kmeans: uses C++ (Rcpp) to optimize the speed of Kmeans clustering as compared with R implementation.
-    Start here
+Description: Kmeans: uses C++ (Rcpp) to optimize the speed of Kmeans clustering as compared with R implementation.    Multi-Class logistic regression: Uses C++ (Rcpp) to optimize the speed of Multi-class logistic regression as compared with R implementation.
 License: GPL (>= 3)
 Imports: Rcpp (>= 1.0.5)
 LinkingTo: Rcpp, RcppArmadillo

@@ -10,6 +10,12 @@
 // [[Rcpp::depends(RcppArmadillo)]]
 using namespace Rcpp;
 
+// X - n by p matrix containing n data points to cluster
+// K - integer specifying number of clusters
+// M - (optional) K by p matrix of cluster centers
+// Y - returns the vector Y of length n of cluster assignments (numbers from 1 to K)
+// numIter - number of maximal iterations for the algorithm, the default value is 100
+
 // [[Rcpp::export]]
 arma::uvec MyKmeans_c(const arma::mat& X, int K,
                             const arma::mat& M, int numIter = 100){

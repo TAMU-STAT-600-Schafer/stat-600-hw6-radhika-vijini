@@ -16,27 +16,7 @@
 #' # K-means with K = 3 clusters and random initialization
 #' result <- MyKmeans(X, K = 3)
 #' print(result)
-#'  [,1]
-#'  [1,]    1
-#'  [2,]    1
-#'  [3,]    3
-#'  [4,]    1
-#'  [5,]    1
-#'  [6,]    3
-#'  [7,]    3
-#'  [8,]    1
-#'  [9,]    1
-#' [10,]    3
-#' [11,]    3
-#' [12,]    1
-#' [13,]    3
-#' [14,]    1
-#' [15,]    3
-#' [16,]    2
-#' [17,]    3
-#' [18,]    1
-#' [19,]    3
-#' [20,]    1
+
 
 MyKmeans <- function(X, K, M = NULL, numIter = 100){
   

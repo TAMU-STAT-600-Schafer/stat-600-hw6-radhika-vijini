@@ -64,10 +64,12 @@ LRMultiClass <- function(X,
       ((nrow(beta_init) != p) || ncol(beta_init) != K)) {
     stop("Error: Check that the dimensions of beta are p x K.")
   }
-  
+  beta <- beta_init
   # Call C++ LRMultiClass_c function to implement the algorithm
-  out = LRMultiClass_c(X, y, beta_init, numIter, eta, lambda)
+  out = LRMultiClass_c(X = X, y = y, beta_init = beta, numIter = numIter, eta = eta, lambda = lambda)
   
   # Return the class assignments
   return(out)
 }
+
+

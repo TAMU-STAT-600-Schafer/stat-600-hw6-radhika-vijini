@@ -1,11 +1,22 @@
 Package: GroupHW
 Type: Package
-Title: VR Kmeans and Multilogistic Rcpp with Armadillo Implementation 
+Title: Kmeans and Multilogistic Rcpp with Armadillo Implementation 
 Version: 1.0
-Date: 2020-10-17
-Author: c(person("Radhika", "Kulkarni", email = "rrkulkarni@tamu.edu", role = c("aut", "cre")), person("Vijini Lakmini", "Rathnayake Mudiyanselage", email = "vijinil@tamu.edu", role = "aut"))
-Maintainer: <rrkulkarni@tamu.edu>
-Description: Kmeans: uses C++ (Rcpp) to optimize the speed of Kmeans clustering as compared with R implementation.    Multi-Class logistic regression: Uses C++ (Rcpp) to optimize the speed of Multi-class logistic regression as compared with R implementation.
+Date: 2024-10-30
+Authors@R: 
+    c(person(given = "Radhika",
+             family = "Kulkarni",
+             role = c("aut","cre"),
+             email = "rrkulkarni@tamu.edu"),
+      person(given = "Vijini Lakmini",
+             family = "Rathnayake Mudiyanselage",
+             role = c("aut"),
+             email = "vijinil@tamu.edu"))
+Maintainer: Radhika Kulkarni <rrkulkarni@tamu.edu>
+Description: 
+    Kmeans: uses C++ (Rcpp) to optimize the speed of Kmeans clustering as
+    compared with R implementation. Multi-Class logistic regression: Uses C++ 
+    with Armadillo library for efficient computation.
 License: GPL (>= 3)
 Imports: Rcpp (>= 1.0.5)
 LinkingTo: Rcpp, RcppArmadillo

@@ -21,8 +21,7 @@
 #' K <- 2    
 #' X <- cbind(1, matrix(rnorm(n * (p - 1)), nrow = n))  
 #' y <- sample(0:(K-1), size = n, replace = TRUE)
-#' beta_init <- NULL
-#' LRMultiClass(X, y, beta_init, numIter = 50, eta = 0.1, lambda = 1)  
+#' LRMultiClass(X = X, y = y, numIter = 50, eta = 0.1, lambda = 1)  
 
 LRMultiClass <- function(X,
                          y,
